@@ -1,0 +1,18 @@
+2026-04-09 06:37:35,961 INFO ipython === bench console session ===
+2026-04-09 06:37:35,961 INFO ipython frappe.db.get_value("Module Def", "HR", ["name", "app_name"], as_dict=True)
+2026-04-09 06:37:35,961 INFO ipython frappe.db.get_value("Module Def", "Payroll", ["name", "app_name"], as_dict=True)
+2026-04-09 06:37:35,961 INFO ipython frappe.db.exists("DocType", "Salary Component")
+2026-04-09 06:37:35,961 INFO ipython if frappe.db.exists("Module Def", "HR"):
+    frappe.delete_doc("Module Def", "HR", force=True)
+    
+2026-04-09 06:37:35,961 INFO ipython if frappe.db.exists("Module Def", "Payroll"):
+    frappe.delete_doc("Module Def", "Payroll", force=True)
+    
+2026-04-09 06:37:35,961 INFO ipython exit;
+2026-04-09 06:37:35,962 INFO ipython === session end ===
+2026-04-09 06:38:43,219 INFO ipython === bench console session ===
+2026-04-09 06:38:43,220 INFO ipython frappe.db.delete("Module Def", {"name": ["in", ["HR", "Payroll"]]})
+2026-04-09 06:38:43,220 INFO ipython frappe.db.commit()
+2026-04-09 06:38:43,220 INFO ipython frappe.db.get_value("Module Def", "HR", ["name", "app_name"], as_dict=True)
+2026-04-09 06:38:43,220 INFO ipython frappe.db.get_value("Module Def", "Payroll", ["name", "app_name"], as_dict=True)
+2026-04-09 06:38:43,220 INFO ipython === session end ===

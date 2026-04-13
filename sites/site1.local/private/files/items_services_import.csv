@@ -1,0 +1,6 @@
+item_code,item_name,item_group,stock_uom,is_stock_item,standard_rate
+CONS-HR,Data Engineer - Hourly,Consulting Services,Hour,0,2000
+CONS-DM,Data Migration - Hourly,Consulting Services,Hour,0,2500
+CONS-AI,AI Solution - Hourly,Consulting Services,Hour,0,3000
+CONS-QA,QA Testing - Hourly,Consulting Services,Hour,0,1500
+CONS-ASSESS,AI Assessment - Fixed,Consulting Services,Unit,0,50000
