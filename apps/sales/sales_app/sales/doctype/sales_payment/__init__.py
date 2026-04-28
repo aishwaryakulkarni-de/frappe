@@ -1,0 +1,2 @@
+"""Sales Payment DocType."""
+
