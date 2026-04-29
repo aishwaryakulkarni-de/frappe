@@ -52,7 +52,7 @@ def create_sales_quotation_from_opportunity(source_name: str) -> str:
 def create_sales_order_from_quotation(source_name: str) -> str:
 	quotation = frappe.get_doc("Sales Quotation", source_name)
 	order = _insert_doc(
-		"Sales Order",
+		"Sales Lifecycle Order",
 		{
 			"quotation": quotation.name,
 			"party_name": quotation.party_name,
@@ -69,7 +69,7 @@ def create_sales_order_from_quotation(source_name: str) -> str:
 
 @frappe.whitelist()
 def create_sales_invoice_from_order(source_name: str) -> str:
-	order = frappe.get_doc("Sales Order", source_name)
+	order = frappe.get_doc("Sales Lifecycle Order", source_name)
 	invoice = _insert_doc(
 		"Sales Invoice",
 		{
@@ -106,9 +106,9 @@ def create_sales_payment_from_invoice(source_name: str) -> str:
 @frappe.whitelist()
 def get_sales_dashboard_counts() -> dict:
 	return {
-		"leads": frappe.db.count("Sales Lead"),
-		"opportunities": frappe.db.count("Sales Opportunity"),
-		"quotations": frappe.db.count("Sales Quotation"),
+		"leads": frappe.db.count("Lead"),
+		"opportunities": frappe.db.count("Opportunity"),
+		"quotations": frappe.db.count("Quotation"),
 		"orders": frappe.db.count("Sales Order"),
 		"invoices": frappe.db.count("Sales Invoice"),
 		"payments": frappe.db.count("Sales Payment"),

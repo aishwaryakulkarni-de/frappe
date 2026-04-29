@@ -23,6 +23,18 @@ from erpnext.crm.utils import (
 from erpnext.setup.utils import get_exchange_rate
 from erpnext.utilities.transaction_base import TransactionBase
 
+SALES_STAGE_PROBABILITY_MAP = {
+	"Prospecting": 10,
+	"Needs Analysis": 20,
+	"Value Proposition": 40,
+	"Identifying Decision Makers": 50,
+	"Perception Analysis": 60,
+	"Proposal / Price Quote": 70,
+	"Negotiation / Review": 85,
+	"Closed Won": 100,
+	"Closed Lost": 0,
+}
+
 
 class Opportunity(TransactionBase, CRMNote):
 	# begin: auto-generated types
@@ -69,9 +81,10 @@ class Opportunity(TransactionBase, CRMNote):
 		market_segment: DF.Link | None
 		naming_series: DF.Literal["CRM-OPP-.YYYY.-"]
 		no_of_employees: DF.Literal["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"]
+		next_contact_date: DF.Date | None
 		notes: DF.Table[CRMNote]
 		opportunity_amount: DF.Currency
-		opportunity_from: DF.Link
+		opportunity_from: DF.Literal["Lead", "Customer"]
 		opportunity_owner: DF.Link | None
 		opportunity_type: DF.Link | None
 		order_lost_reason: DF.SmallText | None
@@ -79,10 +92,20 @@ class Opportunity(TransactionBase, CRMNote):
 		phone: DF.Data | None
 		phone_ext: DF.Data | None
 		probability: DF.Percent
-		sales_stage: DF.Link | None
+		sales_stage: DF.Literal[
+			"Prospecting",
+			"Needs Analysis",
+			"Value Proposition",
+			"Identifying Decision Makers",
+			"Perception Analysis",
+			"Proposal / Price Quote",
+			"Negotiation / Review",
+			"Closed Won",
+			"Closed Lost",
+		] | None
 		source: DF.Link | None
 		state: DF.Data | None
-		status: DF.Literal["Open", "Quotation", "Converted", "Lost", "Replied", "Closed"]
+		status: DF.Literal["Open", "Quotation", "Converted", "Lost", "Closed"]
 		territory: DF.Link | None
 		title: DF.Data | None
 		total: DF.Currency
@@ -132,12 +155,23 @@ class Opportunity(TransactionBase, CRMNote):
 		self.validate_uom_is_integer("uom", "qty")
 		self.validate_cust_name()
 		self.map_fields()
+		self.set_probability_from_sales_stage()
+		self.validate_lost_reason()
 		self.set_exchange_rate()
 
 		if not self.title:
 			self.title = self.customer_name
 
 		self.calculate_totals()
+
+	def set_probability_from_sales_stage(self):
+		if self.sales_stage in SALES_STAGE_PROBABILITY_MAP:
+			self.probability = SALES_STAGE_PROBABILITY_MAP[self.sales_stage]
+
+	def validate_lost_reason(self):
+		if self.status == "Lost" or self.sales_stage == "Closed Lost":
+			if not self.order_lost_reason:
+				frappe.throw(_("Detailed Reason is mandatory when opportunity is Lost."))
 
 	def on_update(self):
 		self.update_prospect()
@@ -339,8 +373,6 @@ class Opportunity(TransactionBase, CRMNote):
 					customer_name = company_name or lead_name
 
 				self.customer_name = customer_name
-			elif self.opportunity_from == "Prospect":
-				self.customer_name = self.party_name
 
 	def validate_item_details(self):
 		if not self.get("items"):

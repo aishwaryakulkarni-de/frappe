@@ -1,0 +1,176 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-04-22 09:57:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "opportunity",
+  "status",
+  "valid_till",
+  "section_break_party",
+  "party_name",
+  "company",
+  "column_break_party",
+  "contact_email",
+  "contact_phone",
+  "section_break_amount",
+  "quoted_amount",
+  "terms",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "SQT-.YYYY.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "SQT-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "opportunity",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Sales Opportunity",
+   "options": "Sales Opportunity",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nOpen\nOrdered\nLost\nCancelled"
+  },
+  {
+   "fieldname": "valid_till",
+   "fieldtype": "Date",
+   "label": "Valid Till",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_party",
+   "fieldtype": "Section Break",
+   "label": "Party"
+  },
+  {
+   "fieldname": "party_name",
+   "fieldtype": "Data",
+   "label": "Party Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_party",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Contact Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "contact_phone",
+   "fieldtype": "Data",
+   "label": "Contact Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "section_break_amount",
+   "fieldtype": "Section Break",
+   "label": "Amounts"
+  },
+  {
+   "fieldname": "quoted_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Quoted Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "terms",
+   "fieldtype": "Text Editor",
+   "label": "Terms"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Sales Quotation",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-04-22 16:33:59.666317",
+ "modified_by": "Administrator",
+ "module": "Sales",
+ "name": "Sales Quotation",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "party_name"
+}

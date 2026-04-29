@@ -1,3 +1,4 @@
 frappe
 erpnext
 hrms
+sales_app

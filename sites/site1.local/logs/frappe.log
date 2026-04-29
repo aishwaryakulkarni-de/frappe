@@ -56,3 +56,36 @@ Form Dict: {}
 2026-04-10 11:06:11,852 ERROR frappe New Exception collected in error log
 Site: site1.local
 Form Dict: {'recipients': 'pawan.ahire@magnadata.in', 'subject': 'User: pawan.ahire@magnadata.in', 'content': '<div class="ql-editor read-mode"><p><br></p></div>', 'doctype': 'User', 'name': 'pawan@magnadata.in', 'send_email': '1', 'print_html': '', 'send_me_a_copy': '0', 'print_format': 'Standard', 'attachments': '[]', 'read_receipt': '0', 'print_letterhead': '1', 'send_after': '', 'print_language': 'en', 'in_reply_to': '', 'cmd': 'frappe.core.doctype.communication.email.make'}
+2026-04-29 06:43:53,887 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.selling.doctype.quotation.quotation.make_sales_order', 'source_name': 'SAL-QTN-2026-00004', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 06:44:08,255 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.selling.doctype.quotation.quotation.make_sales_order', 'source_name': 'SAL-QTN-2026-00004', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 06:44:57,764 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.selling.doctype.quotation.quotation.make_sales_order', 'source_name': 'SAL-QTN-2026-00004', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 07:02:56,299 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'doctype': 'Quotation', 'name': 'SAL-QTN-2026-00004', 'items': '["Sales Order","Auto Repeat"]', 'cmd': 'frappe.desk.notifications.get_open_count'}
+2026-04-29 07:03:56,229 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'doctype': 'Quotation', 'name': 'SAL-QTN-2026-00004', 'items': '["Sales Order","Auto Repeat"]', 'cmd': 'frappe.desk.notifications.get_open_count'}
+2026-04-29 07:06:33,459 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.selling.doctype.quotation.quotation.make_sales_order', 'source_name': 'SAL-QTN-2026-00005', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 07:07:25,330 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.selling.doctype.quotation.quotation.make_sales_order', 'source_name': 'SAL-QTN-2026-00004', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 09:39:24,917 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice', 'source_name': 'MAT-DN-2026-00002', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 09:43:10,533 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice', 'source_name': 'MAT-DN-2026-00002', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 09:53:32,399 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice', 'source_name': 'MAT-DN-2026-00002', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}
+2026-04-29 09:55:06,267 ERROR frappe New Exception collected in error log
+Site: site1.local
+Form Dict: {'method': 'erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice', 'source_name': 'MAT-DN-2026-00002', 'args': '', 'selected_children': '{}', 'cmd': 'frappe.model.mapper.make_mapped_doc'}

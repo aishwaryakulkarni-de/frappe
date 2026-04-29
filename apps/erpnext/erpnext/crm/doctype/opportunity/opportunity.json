@@ -24,6 +24,7 @@
   "column_break_10",
   "sales_stage",
   "expected_closing",
+  "next_contact_date",
   "probability",
   "organization_details_section",
   "no_of_employees",
@@ -107,13 +108,13 @@
   },
   {
    "fieldname": "opportunity_from",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Opportunity From",
    "oldfieldname": "enquiry_from",
    "oldfieldtype": "Select",
-   "options": "DocType",
+   "options": "Lead\nCustomer",
    "print_hide": 1,
    "reqd": 1
   },
@@ -170,7 +171,7 @@
    "no_copy": 1,
    "oldfieldname": "status",
    "oldfieldtype": "Select",
-   "options": "Open\nQuotation\nConverted\nLost\nReplied\nClosed",
+   "options": "Open\nQuotation\nConverted\nLost\nClosed",
    "print_hide": 1,
    "reqd": 1
   },
@@ -178,14 +179,18 @@
    "fieldname": "order_lost_reason",
    "fieldtype": "Small Text",
    "label": "Detailed Reason",
-   "no_copy": 1,
-   "read_only": 1
+   "no_copy": 1
   },
   {
    "fieldname": "expected_closing",
    "fieldtype": "Date",
    "label": "Expected Closing Date",
    "no_copy": 1
+  },
+  {
+   "fieldname": "next_contact_date",
+   "fieldtype": "Date",
+   "label": "Next Contact Date"
   },
   {
    "fieldname": "section_break_14",
@@ -211,12 +216,12 @@
   {
    "default": "Prospecting",
    "fieldname": "sales_stage",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "Sales Stage",
-   "options": "Sales Stage"
+   "options": "Prospecting\nNeeds Analysis\nValue Proposition\nIdentifying Decision Makers\nPerception Analysis\nProposal / Price Quote\nNegotiation / Review\nClosed Won\nClosed Lost"
   },
   {
-   "default": "100",
+   "default": "10",
    "fieldname": "probability",
    "fieldtype": "Percent",
    "label": "Probability (%)"

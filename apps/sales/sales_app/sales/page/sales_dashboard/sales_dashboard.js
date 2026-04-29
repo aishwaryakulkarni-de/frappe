@@ -6,9 +6,9 @@ frappe.pages["sales-dashboard"].on_page_load = function (wrapper) {
 	});
 
 	const sections = [
-		{ key: "leads", label: "Leads", doctype: "Sales Lead", color: "#2563eb" },
-		{ key: "opportunities", label: "Opportunities", doctype: "Sales Opportunity", color: "#7c3aed" },
-		{ key: "quotations", label: "Quotations", doctype: "Sales Quotation", color: "#0891b2" },
+		{ key: "leads", label: "Leads", doctype: "Lead", color: "#2563eb" },
+		{ key: "opportunities", label: "Opportunities", doctype: "Opportunity", color: "#7c3aed" },
+		{ key: "quotations", label: "Quotations", doctype: "Quotation", color: "#0891b2" },
 		{ key: "orders", label: "Orders", doctype: "Sales Order", color: "#ea580c" },
 		{ key: "invoices", label: "Invoices", doctype: "Sales Invoice", color: "#dc2626" },
 		{ key: "payments", label: "Payments", doctype: "Sales Payment", color: "#16a34a" },
@@ -322,8 +322,8 @@ frappe.pages["sales-dashboard"].on_page_load = function (wrapper) {
 		}
 	};
 
-	body.find("#sales-new-lead").on("click", () => frappe.new_doc("Sales Lead"));
-	body.find("#sales-new-opportunity").on("click", () => frappe.new_doc("Sales Opportunity"));
+	body.find("#sales-new-lead").on("click", () => frappe.new_doc("Lead"));
+	body.find("#sales-new-opportunity").on("click", () => frappe.new_doc("Opportunity"));
 	body.find("#sales-refresh").on("click", () => loadDashboard());
 
 	page.set_primary_action(__("Refresh"), () => loadDashboard());

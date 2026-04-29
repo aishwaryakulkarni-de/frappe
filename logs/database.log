@@ -347,3 +347,345 @@ ALTER TABLE `tabTimesheet` MODIFY `total_costing_amount` decimal(21,9) not null 
 ALTER TABLE `tabSales Invoice` ADD COLUMN `workflow_state` varchar(140)
 2026-04-13 10:49:40,636 WARNING database DDL Query made to DB:
 ALTER TABLE `tabSales Invoice` MODIFY `write_off_amount` decimal(21,9) not null default 0, MODIFY `base_paid_amount` decimal(21,9) not null default 0, MODIFY `base_write_off_amount` decimal(21,9) not null default 0, MODIFY `paid_amount` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `total_billing_hours` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `base_change_amount` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `total_advance` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `outstanding_amount` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `change_amount` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0
+2026-04-22 12:07:19,656 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-22 12:07:20,356 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-22 12:07:21,043 WARNING database DDL Query made to DB:
+ALTER TABLE `tabLead` MODIFY `annual_revenue` decimal(21,9) not null default 0, MODIFY `status` varchar(140) default 'Open'
+2026-04-22 12:07:21,364 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-28 11:10:17,484 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-28 11:10:18,133 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-28 11:10:18,797 WARNING database DDL Query made to DB:
+ALTER TABLE `tabOpportunity` ADD COLUMN `next_contact_date` date
+2026-04-28 11:10:18,807 WARNING database DDL Query made to DB:
+ALTER TABLE `tabOpportunity` MODIFY `opportunity_amount` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `annual_revenue` decimal(21,9) not null default 0, MODIFY `first_response_time` decimal(21,9), MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `probability` decimal(21,9) not null default 10.0, MODIFY `base_opportunity_amount` decimal(21,9) not null default 0
+2026-04-28 11:10:19,062 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-28 11:20:42,331 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-28 11:20:42,895 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-28 11:20:43,514 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-28 11:21:30,530 WARNING database DDL Query made to DB:
+create table `tabSales Opportunity` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus int(1) not null default '0',
+			idx int(8) not null default '0',
+			`naming_series` varchar(140) default 'SOPP-.YYYY.-',
+`lead` varchar(140),
+`status` varchar(140) default 'Open',
+`party_name` varchar(140),
+`company` varchar(140),
+`contact_email` varchar(140),
+`contact_phone` varchar(140),
+`expected_value` decimal(21,9) not null default 0,
+`expected_closing_date` date,
+`notes` text,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-04-28 11:21:30,604 WARNING database DDL Query made to DB:
+create table `tabSales Quotation` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus int(1) not null default '0',
+			idx int(8) not null default '0',
+			`naming_series` varchar(140) default 'SQT-.YYYY.-',
+`opportunity` varchar(140),
+`status` varchar(140) default 'Draft',
+`valid_till` date,
+`party_name` varchar(140),
+`company` varchar(140),
+`contact_email` varchar(140),
+`contact_phone` varchar(140),
+`quoted_amount` decimal(21,9) not null default 0,
+`terms` longtext,
+`amended_from` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-04-28 11:21:30,776 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` ADD COLUMN `sales_order` varchar(140), ADD COLUMN `invoice_date` date, ADD COLUMN `party_name` varchar(140), ADD COLUMN `contact_phone` varchar(140), ADD COLUMN `invoice_amount` decimal(21,9) not null default 0, ADD COLUMN `notes` text
+2026-04-28 11:21:30,786 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `naming_series` varchar(140) default 'SINV-.YYYY.-', MODIFY `status` varchar(140) default 'Draft'
+2026-04-28 11:21:30,797 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` DROP INDEX `posting_date`
+2026-04-28 11:21:30,856 WARNING database DDL Query made to DB:
+create table `tabSales Lead` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus int(1) not null default '0',
+			idx int(8) not null default '0',
+			`naming_series` varchar(140) default 'SL-.YYYY.-',
+`lead_name` varchar(140),
+`status` varchar(140) default 'Open',
+`lead_source` varchar(140),
+`party_name` varchar(140),
+`company` varchar(140),
+`contact_email` varchar(140),
+`contact_phone` varchar(140),
+`expected_value` decimal(21,9) not null default 0,
+`notes` text,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-04-28 11:21:30,919 WARNING database DDL Query made to DB:
+create table `tabSales Payment` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus int(1) not null default '0',
+			idx int(8) not null default '0',
+			`naming_series` varchar(140) default 'SPAY-.YYYY.-',
+`sales_invoice` varchar(140),
+`status` varchar(140) default 'Pending',
+`payment_date` date,
+`mode_of_payment` varchar(140),
+`party_name` varchar(140),
+`company` varchar(140),
+`paid_amount` decimal(21,9) not null default 0,
+`reference_no` varchar(140),
+`reference_date` date,
+`notes` text,
+`amended_from` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-04-28 11:21:31,053 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` ADD COLUMN `quotation` varchar(140), ADD COLUMN `party_name` varchar(140), ADD COLUMN `order_amount` decimal(21,9) not null default 0, ADD COLUMN `notes` text, ADD COLUMN `order_date` date
+2026-04-28 11:21:31,061 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `naming_series` varchar(140) default 'SO-.YYYY.-'
+2026-04-28 11:21:31,071 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` DROP INDEX `status`
+2026-04-28 11:21:40,101 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-28 11:21:40,570 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-28 11:21:40,967 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `write_off_amount` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `outstanding_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `paid_amount` decimal(21,9) not null default 0, MODIFY `total_advance` decimal(21,9) not null default 0, MODIFY `status` varchar(64) default 'Draft', MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `change_amount` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `total_billing_hours` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_paid_amount` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `base_change_amount` decimal(21,9) not null default 0, MODIFY `base_write_off_amount` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0
+2026-04-28 11:21:40,980 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` ADD INDEX `posting_date_index`(`posting_date`)
+2026-04-28 11:21:41,490 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `advance_paid` decimal(21,9) not null default 0, MODIFY `per_picked` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `per_delivered` decimal(21,9) not null default 0, MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `per_billed` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0
+2026-04-28 11:21:41,503 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` ADD INDEX `status_index`(`status`)
+2026-04-28 11:21:41,627 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-28 11:21:42,247 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `invoice_amount` decimal(21,9) not null default 0, MODIFY `status` varchar(140) default 'Draft', MODIFY `naming_series` varchar(140) default 'SINV-.YYYY.-'
+2026-04-28 11:21:42,256 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` DROP INDEX `posting_date_index`
+2026-04-28 11:21:42,414 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `naming_series` varchar(140) default 'SO-.YYYY.-', MODIFY `order_amount` decimal(21,9) not null default 0
+2026-04-28 11:21:42,450 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` DROP INDEX `status_index`
+2026-04-28 12:06:07,099 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-28 12:06:07,898 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-28 12:06:08,483 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `status` varchar(64) default 'Draft', MODIFY `total_billing_hours` decimal(21,9) not null default 0, MODIFY `base_change_amount` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `outstanding_amount` decimal(21,9) not null default 0, MODIFY `paid_amount` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `write_off_amount` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `base_write_off_amount` decimal(21,9) not null default 0, MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `base_paid_amount` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `change_amount` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `total_advance` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0
+2026-04-28 12:06:08,499 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` ADD INDEX `posting_date_index`(`posting_date`)
+2026-04-28 12:06:09,129 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `total` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `advance_paid` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `per_billed` decimal(21,9) not null default 0, MODIFY `per_picked` decimal(21,9) not null default 0, MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `per_delivered` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0
+2026-04-28 12:06:09,141 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` ADD INDEX `status_index`(`status`)
+2026-04-28 12:06:09,326 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-28 12:06:10,192 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `invoice_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140) default 'SINV-.YYYY.-', MODIFY `status` varchar(140) default 'Draft'
+2026-04-28 12:06:10,204 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` DROP INDEX `posting_date_index`
+2026-04-28 12:06:10,351 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `order_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140) default 'SO-.YYYY.-'
+2026-04-28 12:06:10,362 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` DROP INDEX `status_index`
+2026-04-29 05:56:02,547 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-29 05:56:03,851 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-29 05:56:04,880 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `total_billing_hours` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_write_off_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `paid_amount` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `status` varchar(64) default 'Draft', MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `change_amount` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `base_paid_amount` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `base_change_amount` decimal(21,9) not null default 0, MODIFY `write_off_amount` decimal(21,9) not null default 0, MODIFY `total_advance` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `outstanding_amount` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0
+2026-04-29 05:56:04,903 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` ADD INDEX `posting_date_index`(`posting_date`)
+2026-04-29 05:56:06,027 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `per_billed` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `per_picked` decimal(21,9) not null default 0, MODIFY `advance_paid` decimal(21,9) not null default 0, MODIFY `per_delivered` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0
+2026-04-29 05:56:06,048 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` ADD INDEX `status_index`(`status`)
+2026-04-29 05:56:06,311 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-29 05:56:07,724 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Opportunity` ADD COLUMN `opportunity_from` varchar(140) default 'Lead', ADD COLUMN `sales_stage` varchar(140) default 'Prospecting', ADD COLUMN `probability` decimal(21,9) not null default 10.0, ADD COLUMN `next_contact_date` date
+2026-04-29 05:56:07,744 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Opportunity` MODIFY `expected_value` decimal(21,9) not null default 0
+2026-04-29 05:56:07,901 WARNING database DDL Query made to DB:
+create table `tabSales Delivery` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus int(1) not null default '0',
+			idx int(8) not null default '0',
+			`naming_series` varchar(140) default 'SDN-.YYYY.-',
+`sales_order` varchar(140),
+`status` varchar(140) default 'Draft',
+`posting_date` date,
+`shipping_address` text,
+`transporter` varchar(140),
+`lr_no` varchar(140),
+`lr_date` date,
+`party_name` varchar(140),
+`company` varchar(140),
+`contact_email` varchar(140),
+`contact_phone` varchar(140),
+`delivered_amount` decimal(21,9) not null default 0,
+`notes` text,
+`amended_from` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-04-29 05:56:08,078 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Quotation` MODIFY `quoted_amount` decimal(21,9) not null default 0
+2026-04-29 05:56:07,123 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `status` varchar(140) default 'Draft', MODIFY `naming_series` varchar(140) default 'SINV-.YYYY.-', MODIFY `invoice_amount` decimal(21,9) not null default 0
+2026-04-29 05:56:07,141 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` DROP INDEX `posting_date_index`
+2026-04-29 05:56:07,370 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `naming_series` varchar(140) default 'SO-.YYYY.-', MODIFY `order_amount` decimal(21,9) not null default 0
+2026-04-29 05:56:07,389 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` DROP INDEX `status_index`
+2026-04-29 06:11:38,756 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-29 06:11:39,899 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-29 06:11:40,767 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `base_change_amount` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `base_write_off_amount` decimal(21,9) not null default 0, MODIFY `total_advance` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `paid_amount` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `outstanding_amount` decimal(21,9) not null default 0, MODIFY `write_off_amount` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `total_billing_hours` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `base_paid_amount` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `change_amount` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `status` varchar(64) default 'Draft', MODIFY `total_net_weight` decimal(21,9) not null default 0
+2026-04-29 06:11:40,785 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` ADD INDEX `posting_date_index`(`posting_date`)
+2026-04-29 06:11:41,905 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `per_picked` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `per_billed` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `advance_paid` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `per_delivered` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140)
+2026-04-29 06:11:41,919 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` ADD INDEX `status_index`(`status`)
+2026-04-29 06:11:42,126 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-29 06:11:43,457 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `naming_series` varchar(140) default 'SINV-.YYYY.-', MODIFY `invoice_amount` decimal(21,9) not null default 0, MODIFY `status` varchar(140) default 'Draft'
+2026-04-29 06:11:43,474 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` DROP INDEX `posting_date_index`
+2026-04-29 06:11:43,888 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `order_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140) default 'SO-.YYYY.-'
+2026-04-29 06:11:43,919 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` DROP INDEX `status_index`
+2026-04-29 07:24:40,638 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-29 07:24:41,527 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-29 07:24:42,340 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `paid_amount` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `total_advance` decimal(21,9) not null default 0, MODIFY `change_amount` decimal(21,9) not null default 0, MODIFY `status` varchar(64) default 'Draft', MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `total_billing_hours` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `base_paid_amount` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_change_amount` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `write_off_amount` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `outstanding_amount` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `base_write_off_amount` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0
+2026-04-29 07:24:42,373 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` ADD INDEX `posting_date_index`(`posting_date`)
+2026-04-29 07:24:43,319 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `per_picked` decimal(21,9) not null default 0, MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `advance_paid` decimal(21,9) not null default 0, MODIFY `per_delivered` decimal(21,9) not null default 0, MODIFY `per_billed` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140)
+2026-04-29 07:24:43,340 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Order` ADD INDEX `status_index`(`status`)
+2026-04-29 07:24:43,578 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-29 07:24:44,731 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Delivery` MODIFY `delivered_amount` decimal(21,9) not null default 0
+2026-04-29 07:24:45,010 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `invoice_amount` decimal(21,9) not null default 0, MODIFY `status` varchar(140) default 'Draft', MODIFY `naming_series` varchar(140) default 'SINV-.YYYY.-'
+2026-04-29 07:24:45,031 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` DROP INDEX `posting_date_index`
+2026-04-29 07:24:45,215 WARNING database DDL Query made to DB:
+create table `tabSales Lifecycle Order` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus int(1) not null default '0',
+			idx int(8) not null default '0',
+			`naming_series` varchar(140) default 'SO-.YYYY.-',
+`quotation` varchar(140),
+`status` varchar(140) default 'Draft',
+`order_date` date,
+`delivery_date` date,
+`party_name` varchar(140),
+`company` varchar(140),
+`contact_email` varchar(140),
+`contact_phone` varchar(140),
+`order_amount` decimal(21,9) not null default 0,
+`notes` text,
+`amended_from` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-04-29 09:21:44,697 WARNING database DDL Query made to DB:
+alter table `tabDocType` add column if not exists migration_hash varchar(140)
+2026-04-29 09:21:45,386 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` DROP INDEX `print_heading`
+2026-04-29 09:21:45,977 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `base_rounded_total` decimal(21,9) not null default 0, MODIFY `total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `base_discount_amount` decimal(21,9) not null default 0, MODIFY `write_off_amount` decimal(21,9) not null default 0, MODIFY `total_qty` decimal(21,9) not null default 0, MODIFY `rounded_total` decimal(21,9) not null default 0, MODIFY `discount_amount` decimal(21,9) not null default 0, MODIFY `base_total` decimal(21,9) not null default 0, MODIFY `amount_eligible_for_commission` decimal(21,9) not null default 0, MODIFY `base_write_off_amount` decimal(21,9) not null default 0, MODIFY `net_total` decimal(21,9) not null default 0, MODIFY `total_advance` decimal(21,9) not null default 0, MODIFY `commission_rate` decimal(21,9) not null default 0, MODIFY `paid_amount` decimal(21,9) not null default 0, MODIFY `base_rounding_adjustment` decimal(21,9) not null default 0, MODIFY `total_commission` decimal(21,9) not null default 0, MODIFY `base_paid_amount` decimal(21,9) not null default 0, MODIFY `conversion_rate` decimal(21,9) not null default 0, MODIFY `total_billing_hours` decimal(21,9) not null default 0, MODIFY `status` varchar(64) default 'Draft', MODIFY `change_amount` decimal(21,9) not null default 0, MODIFY `base_change_amount` decimal(21,9) not null default 0, MODIFY `outstanding_amount` decimal(21,9) not null default 0, MODIFY `base_net_total` decimal(21,9) not null default 0, MODIFY `loyalty_amount` decimal(21,9) not null default 0, MODIFY `total_net_weight` decimal(21,9) not null default 0, MODIFY `plc_conversion_rate` decimal(21,9) not null default 0, MODIFY `base_total_taxes_and_charges` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140), MODIFY `grand_total` decimal(21,9) not null default 0, MODIFY `rounding_adjustment` decimal(21,9) not null default 0, MODIFY `base_grand_total` decimal(21,9) not null default 0, MODIFY `additional_discount_percentage` decimal(21,9) not null default 0, MODIFY `total` decimal(21,9) not null default 0
+2026-04-29 09:21:45,992 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` ADD INDEX `posting_date_index`(`posting_date`)
+2026-04-29 09:21:46,581 WARNING database DDL Query made to DB:
+ALTER TABLE `tabPrint Heading` ADD UNIQUE INDEX IF NOT EXISTS print_heading (`print_heading`)
+2026-04-29 09:21:47,473 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` MODIFY `status` varchar(140) default 'Draft', MODIFY `invoice_amount` decimal(21,9) not null default 0, MODIFY `naming_series` varchar(140) default 'SINV-.YYYY.-'
+2026-04-29 09:21:47,486 WARNING database DDL Query made to DB:
+ALTER TABLE `tabSales Invoice` DROP INDEX `posting_date_index`

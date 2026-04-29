@@ -1,0 +1,2 @@
+"""Sales dashboard page package."""
+

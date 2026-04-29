@@ -27,9 +27,25 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 		let doc = this.frm.doc;
 		erpnext.toggle_naming_series();
 
+		if (doc.status === "Converted") {
+			this.frm.disable_save();
+			this.frm.fields.forEach((field) => {
+				if (field.df.fieldtype && !["Tab Break", "Section Break", "Column Break", "HTML"].includes(field.df.fieldtype)) {
+					this.frm.set_df_property(field.df.fieldname, "read_only", 1);
+				}
+			});
+		}
+
 		if (!this.frm.is_new() && doc.__onload && !doc.__onload.is_customer) {
 			this.frm.add_custom_button(__("Customer"), this.make_customer.bind(this), __("Create"));
 			this.frm.add_custom_button(__("Opportunity"), this.make_opportunity.bind(this), __("Create"));
+			if (doc.status !== "Converted") {
+				this.frm.add_custom_button(
+					__("Convert to Opportunity"),
+					this.convert_to_opportunity.bind(this),
+					__("Action")
+				);
+			}
 			this.frm.add_custom_button(__("Quotation"), this.make_quotation.bind(this), __("Create"));
 			if (!doc.__onload.linked_prospects.length) {
 				this.frm.add_custom_button(__("Prospect"), this.make_prospect.bind(this), __("Create"));
@@ -51,6 +67,67 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 
 		this.show_notes();
 		this.show_activities();
+	}
+
+	convert_to_opportunity() {
+		const frm = this.frm;
+		const fields = [
+			{
+				label: __("Customer"),
+				fieldname: "customer_action",
+				fieldtype: "Select",
+				options: "Create New\nUse Existing",
+				default: "Create New",
+				reqd: 1,
+			},
+			{
+				label: __("Existing Customer"),
+				fieldname: "existing_customer",
+				fieldtype: "Link",
+				options: "Customer",
+				depends_on: "eval:doc.customer_action=='Use Existing'",
+				mandatory_depends_on: "eval:doc.customer_action=='Use Existing'",
+			},
+			{
+				label: __("Create Contact"),
+				fieldname: "create_contact",
+				fieldtype: "Check",
+				default: 1,
+			},
+			{
+				label: __("Create Address"),
+				fieldname: "create_address",
+				fieldtype: "Check",
+				default: 1,
+			},
+		];
+
+		const d = new frappe.ui.Dialog({
+			title: __("Convert to Opportunity"),
+			fields,
+			primary_action_label: __("Convert"),
+			primary_action(values) {
+				frappe.call({
+					method: "erpnext.crm.doctype.lead.lead.convert_to_opportunity",
+					args: {
+						source_name: frm.doc.name,
+						customer_action: values.customer_action === "Use Existing" ? "use_existing" : "create_new",
+						existing_customer: values.existing_customer,
+						create_contact: values.create_contact ? 1 : 0,
+						create_address: values.create_address ? 1 : 0,
+					},
+					freeze: true,
+					freeze_message: __("Converting Lead..."),
+					callback: function (r) {
+						if (!r.exc && r.message?.opportunity) {
+							d.hide();
+							frappe.set_route("Form", "Opportunity", r.message.opportunity);
+						}
+					},
+				});
+			},
+		});
+		d.show();
 	}
 
 	add_lead_to_prospect(frm) {

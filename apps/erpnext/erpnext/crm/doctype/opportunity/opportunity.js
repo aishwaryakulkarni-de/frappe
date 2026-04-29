@@ -4,6 +4,18 @@ frappe.provide("erpnext.crm");
 erpnext.pre_sales.set_as_lost("Opportunity");
 erpnext.sales_common.setup_selling_controller();
 
+const SALES_STAGE_PROBABILITY_MAP = {
+	Prospecting: 10,
+	"Needs Analysis": 20,
+	"Value Proposition": 40,
+	"Identifying Decision Makers": 50,
+	"Perception Analysis": 60,
+	"Proposal / Price Quote": 70,
+	"Negotiation / Review": 85,
+	"Closed Won": 100,
+	"Closed Lost": 0,
+};
+
 frappe.ui.form.on("Opportunity", {
 	setup: function (frm) {
 		frm.custom_make_buttons = {
@@ -11,18 +23,14 @@ frappe.ui.form.on("Opportunity", {
 			"Supplier Quotation": "Supplier Quotation",
 		};
 
-		frm.set_query("opportunity_from", function () {
-			return {
-				filters: {
-					name: ["in", ["Customer", "Lead", "Prospect"]],
-				},
-			};
-		});
-
 		frm.email_field = "contact_email";
 	},
 
 	validate: function (frm) {
+		if ((frm.doc.status == "Lost" || frm.doc.sales_stage == "Closed Lost") && !frm.doc.order_lost_reason) {
+			frappe.throw(__("Detailed Reason is required when opportunity is Lost."));
+		}
+
 		if (frm.doc.status == "Lost" && !frm.doc.lost_reasons.length) {
 			frm.trigger("set_as_lost_dialog");
 			frappe.throw(__("Lost Reasons are required in case opportunity is Lost."));
@@ -50,6 +58,13 @@ frappe.ui.form.on("Opportunity", {
 	status: function (frm) {
 		if (frm.doc.status == "Lost") {
 			frm.trigger("set_as_lost_dialog");
+		}
+	},
+
+	sales_stage: function (frm) {
+		const probability = SALES_STAGE_PROBABILITY_MAP[frm.doc.sales_stage];
+		if (probability !== undefined) {
+			frm.set_value("probability", probability);
 		}
 	},
 
@@ -109,7 +124,7 @@ frappe.ui.form.on("Opportunity", {
 				function () {
 					frm.trigger("create_quotation");
 				},
-				__("Create")
+				__("Make")
 			);
 
 			let company_currency = erpnext.get_currency(frm.doc.company);
@@ -152,8 +167,6 @@ frappe.ui.form.on("Opportunity", {
 			frappe.dynamic_link = { doc: frm.doc, fieldname: "party_name", doctype: "Customer" };
 		} else if (frm.doc.opportunity_from == "Lead" && frm.doc.party_name) {
 			frappe.dynamic_link = { doc: frm.doc, fieldname: "party_name", doctype: "Lead" };
-		} else if (frm.doc.opportunity_from == "Prospect" && frm.doc.party_name) {
-			frappe.dynamic_link = { doc: frm.doc, fieldname: "party_name", doctype: "Prospect" };
 		}
 	},
 
@@ -328,14 +341,6 @@ erpnext.crm.Opportunity = class Opportunity extends frappe.ui.form.Controller {
 			me.frm.set_query("party_name", erpnext.queries["lead"]);
 		} else if (me.frm.doc.opportunity_from == "Customer") {
 			me.frm.set_query("party_name", erpnext.queries["customer"]);
-		} else if (me.frm.doc.opportunity_from == "Prospect") {
-			me.frm.set_query("party_name", function () {
-				return {
-					filters: {
-						company: me.frm.doc.company,
-					},
-				};
-			});
 		}
 	}
 

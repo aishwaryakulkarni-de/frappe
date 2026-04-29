@@ -61,19 +61,9 @@ class Lead(SellingController, CRMNote):
 		qualified_on: DF.Date | None
 		request_type: DF.Literal["", "Product Enquiry", "Request for Information", "Suggestions", "Other"]
 		salutation: DF.Link | None
-		source: DF.Link | None
+		source: DF.Literal["Cold Call", "Email", "Web", "Advertisement", "Referral"] | None
 		state: DF.Data | None
-		status: DF.Literal[
-			"Lead",
-			"Open",
-			"Replied",
-			"Opportunity",
-			"Quotation",
-			"Lost Quotation",
-			"Interested",
-			"Converted",
-			"Do Not Contact",
-		]
+		status: DF.Literal["Open", "Replied", "Interested", "Opportunity", "Converted", "Do Not Contact"]
 		territory: DF.Link | None
 		title: DF.Data | None
 		type: DF.Literal["", "Client", "Channel Partner", "Consultant"]
@@ -89,12 +79,31 @@ class Lead(SellingController, CRMNote):
 		self.set_onload("linked_prospects", self.get_linked_prospects())
 
 	def validate(self):
+		self.validate_update_after_conversion()
 		self.set_full_name()
 		self.set_lead_name()
 		self.set_title()
 		self.set_status()
 		self.check_email_id_is_unique()
 		self.validate_email_id()
+
+	def validate_update_after_conversion(self):
+		if self.is_new() or self.flags.ignore_validate_update_after_conversion:
+			return
+
+		before_save = self.get_doc_before_save()
+		if not before_save or before_save.status != "Converted":
+			return
+
+		# Converted leads should remain immutable to preserve funnel history.
+		changes = [
+			fieldname
+			for fieldname, value in self.as_dict().items()
+			if not fieldname.startswith("_") and fieldname not in {"modified", "modified_by", "idx", "owner"}
+			and before_save.get(fieldname) != value
+		]
+		if changes:
+			frappe.throw(_("Converted Lead cannot be edited."))
 
 	def before_insert(self):
 		self.contact_doc = None
@@ -539,3 +548,157 @@ def add_lead_to_prospect(lead, prospect):
 		title=_("Lead -> Prospect"),
 		indicator="green",
 	)
+
+
+@frappe.whitelist()
+def convert_to_opportunity(
+	source_name,
+	customer_action="create_new",
+	existing_customer=None,
+	create_contact=1,
+	create_address=1,
+):
+	lead = frappe.get_doc("Lead", source_name)
+
+	if lead.status == "Converted":
+		frappe.throw(_("Lead is already converted."))
+
+	customer = _get_or_create_customer_for_lead(lead, customer_action, existing_customer)
+	contact = _get_or_create_contact_for_lead(lead, bool(int(create_contact)), customer)
+	address = _get_or_create_address_for_lead(lead, bool(int(create_address)), customer)
+
+	opportunity = make_opportunity(source_name)
+	# Keep Opportunity linked back to the Lead so the Lead dashboard can show the connection.
+	# (make_opportunity() maps Lead -> Opportunity with opportunity_from="Lead" and party_name=lead.name)
+	opportunity.customer_name = customer.customer_name
+	opportunity.insert(ignore_permissions=True)
+
+	if contact:
+		opportunity.contact_person = contact.name
+		opportunity.contact_email = lead.email_id
+		opportunity.contact_mobile = lead.mobile_no
+
+	if address:
+		opportunity.customer_address = address.name
+
+	opportunity.save(ignore_permissions=True)
+
+	lead.db_set("status", "Converted", update_modified=True)
+	frappe.msgprint(
+		_("Lead converted successfully. Opportunity {0} was created.").format(
+			get_link_to_form("Opportunity", opportunity.name)
+		),
+		indicator="green",
+	)
+
+	return {"opportunity": opportunity.name, "customer": customer.name}
+
+
+def _get_or_create_customer_for_lead(lead, customer_action, existing_customer):
+	if customer_action == "use_existing":
+		if not existing_customer:
+			frappe.throw(_("Please select an existing Customer."))
+		return frappe.get_doc("Customer", existing_customer)
+
+	customer_doc = _make_customer(lead.name, ignore_permissions=True)
+	customer_doc.insert(ignore_permissions=True)
+	return customer_doc
+
+
+def _get_or_create_contact_for_lead(lead, should_create, customer):
+	if not should_create:
+		return None
+
+	contact_name = frappe.db.get_value(
+		"Dynamic Link",
+		{
+			"link_doctype": "Lead",
+			"link_name": lead.name,
+			"parenttype": "Contact",
+		},
+		"parent",
+	)
+	contact = frappe.get_doc("Contact", contact_name) if contact_name else lead.create_contact()
+
+	# Ensure the Contact is linked to the Lead (lead.create_contact() doesn't automatically create the link row).
+	if not frappe.db.exists(
+		"Dynamic Link",
+		{
+			"parent": contact.name,
+			"parenttype": "Contact",
+			"link_doctype": "Lead",
+			"link_name": lead.name,
+		},
+	):
+		contact.append(
+			"links",
+			{"link_doctype": "Lead", "link_name": lead.name, "link_title": lead.lead_name},
+		)
+		contact.save(ignore_permissions=True)
+
+	if not frappe.db.exists(
+		"Dynamic Link",
+		{
+			"parent": contact.name,
+			"parenttype": "Contact",
+			"link_doctype": "Customer",
+			"link_name": customer.name,
+		},
+	):
+		contact.append(
+			"links",
+			{"link_doctype": "Customer", "link_name": customer.name, "link_title": customer.customer_name},
+		)
+		contact.save(ignore_permissions=True)
+
+	return contact
+
+
+def _get_or_create_address_for_lead(lead, should_create, customer):
+	if not should_create:
+		return None
+
+	address_name = frappe.db.get_value(
+		"Dynamic Link",
+		{
+			"link_doctype": "Lead",
+			"link_name": lead.name,
+			"parenttype": "Address",
+		},
+		"parent",
+	)
+
+	if address_name:
+		address = frappe.get_doc("Address", address_name)
+	else:
+		if not any([lead.city, lead.state, lead.country]):
+			return None
+		address = frappe.new_doc("Address")
+		address.address_title = customer.customer_name
+		address.address_type = "Billing"
+		address.city = lead.city
+		address.state = lead.state
+		address.country = lead.country
+		address.address_line1 = lead.company_name or lead.lead_name
+		address.append(
+			"links",
+			{"link_doctype": "Lead", "link_name": lead.name, "link_title": lead.lead_name},
+		)
+		address.insert(ignore_permissions=True)
+
+	if not frappe.db.exists(
+		"Dynamic Link",
+		{
+			"parent": address.name,
+			"parenttype": "Address",
+			"link_doctype": "Customer",
+			"link_name": customer.name,
+		},
+	):
+		address.append(
+			"links",
+			{"link_doctype": "Customer", "link_name": customer.name, "link_title": customer.customer_name},
+		)
+		address.save(ignore_permissions=True)
+
+	return address

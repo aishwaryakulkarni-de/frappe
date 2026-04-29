@@ -135,7 +135,7 @@
    "search_index": 1
   },
   {
-   "default": "Lead",
+   "default": "Open",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -144,7 +144,7 @@
    "no_copy": 1,
    "oldfieldname": "status",
    "oldfieldtype": "Select",
-   "options": "Lead\nOpen\nReplied\nOpportunity\nQuotation\nLost Quotation\nInterested\nConverted\nDo Not Contact",
+   "options": "Open\nReplied\nInterested\nOpportunity\nConverted\nDo Not Contact",
    "reqd": 1,
    "search_index": 1
   },
@@ -162,11 +162,11 @@
   },
   {
    "fieldname": "source",
-   "fieldtype": "Link",
-   "label": "Source",
+   "fieldtype": "Select",
+   "label": "Lead Source",
    "oldfieldname": "source",
    "oldfieldtype": "Select",
-   "options": "Lead Source"
+   "options": "Cold Call\nEmail\nWeb\nAdvertisement\nReferral"
   },
   {
    "depends_on": "eval:doc.source == 'Existing Customer'",

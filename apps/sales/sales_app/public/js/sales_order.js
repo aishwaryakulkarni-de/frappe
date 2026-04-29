@@ -1,4 +1,4 @@
-frappe.ui.form.on("Sales Order", {
+frappe.ui.form.on("Sales Lifecycle Order", {
 	refresh(frm) {
 		frm.dashboard.set_headline(__("Current Stage: {0}", [frm.doc.status || "Draft"]));
 		if (!frm.is_new() && frm.doc.docstatus === 1) {

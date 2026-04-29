@@ -1,0 +1,110 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"w9Q2k6pM0p\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Sales App</b></span>\",\"col\":12}},{\"id\":\"lR7dP4nK8x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Dashboard\",\"col\":3}},{\"id\":\"n2VhJ1qC5m\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"t6YbF9sD3a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Opportunity\",\"col\":3}},{\"id\":\"p4EwG8zL7u\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}}]",
+ "creation": "2026-04-28 12:00:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "sell",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Sales",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales App",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Dashboard",
+   "link_count": 0,
+   "link_to": "sales-dashboard",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Lead",
+   "link_count": 0,
+   "link_to": "Lead",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Opportunity",
+   "link_count": 0,
+   "link_to": "Opportunity",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Quotation",
+   "link_count": 0,
+   "link_to": "Quotation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-04-28 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Sales",
+ "name": "Sales",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "sequence_id": 18.0,
+ "shortcuts": [
+  {
+   "label": "Sales Dashboard",
+   "link_to": "sales-dashboard",
+   "type": "Page"
+  },
+  {
+   "label": "Lead",
+   "link_to": "Lead",
+   "type": "DocType"
+  },
+  {
+   "label": "Opportunity",
+   "link_to": "Opportunity",
+   "type": "DocType"
+  },
+  {
+   "label": "Quotation",
+   "link_to": "Quotation",
+   "type": "DocType"
+  }
+ ],
+ "title": "Sales",
+ "type": "Workspace"
+}

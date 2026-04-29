@@ -46,7 +46,7 @@ doctype_js = {
 	"Sales Lead": "public/js/sales_lead.js",
 	"Sales Opportunity": "public/js/sales_opportunity.js",
 	"Sales Quotation": "public/js/sales_quotation.js",
-	"Sales Order": "public/js/sales_order.js",
+	"Sales Lifecycle Order": "public/js/sales_order.js",
 	"Sales Invoice": "public/js/sales_invoice.js",
 	"Sales Payment": "public/js/sales_payment.js",
 }
