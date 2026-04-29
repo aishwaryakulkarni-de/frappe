@@ -1,0 +1,2 @@
+"""Sales Lifecycle Invoice DocType."""
+

@@ -608,3 +608,10 @@
 2026-04-29 09:35:26,827 INFO /home/user1/.local/bin/bench --site site1.local clear-cache
 2026-04-29 09:35:36,427 INFO /home/user1/.local/bin/bench build --site site1.local
 2026-04-29 09:35:48,327 INFO /home/user1/.local/bin/bench build
+2026-04-29 10:30:46,384 INFO /home/user1/.local/bin/bench --site site1.local migrate
+2026-04-29 10:32:28,095 INFO /home/user1/.local/bin/bench --site site1.local migrate
+2026-04-29 10:32:55,570 INFO /home/user1/.local/bin/bench --site site1.local clear-cache
+2026-04-29 10:33:04,424 INFO /home/user1/.local/bin/bench build
+2026-04-29 10:34:19,812 INFO /home/user1/.local/bin/bench --site site1.local clear-cache
+2026-04-29 10:46:04,432 INFO /home/user1/.local/bin/bench --site site1.local clear-cache
+2026-04-29 10:46:10,871 INFO /home/user1/.local/bin/bench build

@@ -3,7 +3,7 @@ from frappe.model.document import Document
 
 
 def _insert_doc(doctype: str, data: dict) -> Document:
-	if doctype == "Sales Invoice" and "posting_date" not in data:
+	if doctype in ("Sales Invoice", "Sales Lifecycle Invoice") and "posting_date" not in data:
 		data["posting_date"] = frappe.utils.nowdate()
 	doc = frappe.get_doc({"doctype": doctype, **data})
 	doc.insert(ignore_permissions=True)
@@ -71,7 +71,7 @@ def create_sales_order_from_quotation(source_name: str) -> str:
 def create_sales_invoice_from_order(source_name: str) -> str:
 	order = frappe.get_doc("Sales Lifecycle Order", source_name)
 	invoice = _insert_doc(
-		"Sales Invoice",
+		"Sales Lifecycle Invoice",
 		{
 			"sales_order": order.name,
 			"party_name": order.party_name,
@@ -87,19 +87,28 @@ def create_sales_invoice_from_order(source_name: str) -> str:
 
 
 @frappe.whitelist()
-def create_sales_payment_from_invoice(source_name: str) -> str:
-	invoice = frappe.get_doc("Sales Invoice", source_name)
+def create_sales_payment_from_invoice(source_name: str, source_doctype: str = "Sales Invoice") -> str:
+	if source_doctype == "Sales Lifecycle Invoice":
+		invoice = frappe.get_doc("Sales Lifecycle Invoice", source_name)
+		paid_amount = getattr(invoice, "invoice_amount", None) or getattr(invoice, "grand_total", None) or 0
+		party_name = getattr(invoice, "party_name", None) or getattr(invoice, "customer_name", None) or ""
+		company = getattr(invoice, "company", None) or ""
+		invoice.db_set("status", "Unpaid")
+	else:
+		invoice = frappe.get_doc("Sales Invoice", source_name)
+		paid_amount = getattr(invoice, "grand_total", None) or getattr(invoice, "invoice_amount", None) or 0
+		party_name = getattr(invoice, "party_name", None) or getattr(invoice, "customer_name", None) or ""
+		company = getattr(invoice, "company", None) or ""
 	payment = _insert_doc(
 		"Sales Payment",
 		{
 			"sales_invoice": invoice.name,
-			"party_name": invoice.party_name,
-			"company": invoice.company,
-			"paid_amount": invoice.invoice_amount or 0,
+			"party_name": party_name,
+			"company": company,
+			"paid_amount": paid_amount or 0,
 			"status": "Pending",
 		},
 	)
-	invoice.db_set("status", "Unpaid")
 	return payment.name
 
 
@@ -111,6 +120,6 @@ def get_sales_dashboard_counts() -> dict:
 		"quotations": frappe.db.count("Quotation"),
 		"orders": frappe.db.count("Sales Order"),
 		"invoices": frappe.db.count("Sales Invoice"),
-		"payments": frappe.db.count("Sales Payment"),
+		"payments": frappe.db.count("Payment Entry") + frappe.db.count("Sales Payment"),
 	}
 

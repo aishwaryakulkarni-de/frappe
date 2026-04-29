@@ -4,7 +4,7 @@ from frappe.utils import add_days, get_first_day, get_last_day, getdate, nowdate
 
 
 def _insert_doc(doctype: str, data: dict) -> Document:
-	if doctype == "Sales Invoice" and "posting_date" not in data:
+	if doctype in ("Sales Invoice", "Sales Lifecycle Invoice") and "posting_date" not in data:
 		data["posting_date"] = frappe.utils.nowdate()
 	doc = frappe.get_doc({"doctype": doctype, **data})
 	doc.insert(ignore_permissions=True)
@@ -109,7 +109,7 @@ def create_sales_invoice_from_order(source_name: str, source_doctype: str = "Sal
 		sales_order = order.name
 
 	invoice = _insert_doc(
-		"Sales Invoice",
+		"Sales Lifecycle Invoice",
 		{
 			"sales_order": sales_order,
 			"party_name": party_name,
@@ -125,19 +125,30 @@ def create_sales_invoice_from_order(source_name: str, source_doctype: str = "Sal
 
 
 @frappe.whitelist()
-def create_sales_payment_from_invoice(source_name: str) -> str:
-	invoice = frappe.get_doc("Sales Invoice", source_name)
+def create_sales_payment_from_invoice(source_name: str, source_doctype: str = "Sales Invoice") -> str:
+	if source_doctype == "Sales Lifecycle Invoice":
+		invoice = frappe.get_doc("Sales Lifecycle Invoice", source_name)
+		paid_amount = getattr(invoice, "invoice_amount", None) or getattr(invoice, "grand_total", None) or 0
+		party_name = getattr(invoice, "party_name", None) or getattr(invoice, "customer_name", None) or ""
+		company = getattr(invoice, "company", None) or ""
+		# Only manage status for our custom lifecycle invoice.
+		invoice.db_set("status", "Unpaid")
+	else:
+		invoice = frappe.get_doc("Sales Invoice", source_name)
+		paid_amount = getattr(invoice, "grand_total", None) or getattr(invoice, "invoice_amount", None) or 0
+		party_name = getattr(invoice, "party_name", None) or getattr(invoice, "customer_name", None) or ""
+		company = getattr(invoice, "company", None) or ""
+
 	payment = _insert_doc(
 		"Sales Payment",
 		{
 			"sales_invoice": invoice.name,
-			"party_name": invoice.party_name,
-			"company": invoice.company,
-			"paid_amount": invoice.invoice_amount or 0,
+			"party_name": party_name,
+			"company": company,
+			"paid_amount": paid_amount or 0,
 			"status": "Pending",
 		},
 	)
-	invoice.db_set("status", "Unpaid")
 	return payment.name
 
 
@@ -152,7 +163,10 @@ def get_sales_dashboard_counts(period: str = "month") -> dict:
 	order_filter = {"transaction_date": ["between", [from_date, to_date]]}
 	delivery_filter = {"posting_date": ["between", [from_date, to_date]]}
 	invoice_filter = {"posting_date": ["between", [from_date, to_date]]}
-	payment_filter = {"payment_date": ["between", [from_date, to_date]]}
+	# ERPNext core Payment Entry uses `posting_date`.
+	payment_entry_filter = {"posting_date": ["between", [from_date, to_date]]}
+	# Your custom Sales Payment (if used) uses `payment_date`.
+	sales_payment_filter = {"payment_date": ["between", [from_date, to_date]]}
 
 	return {
 		"period": period,
@@ -164,15 +178,17 @@ def get_sales_dashboard_counts(period: str = "month") -> dict:
 		"orders": frappe.db.count("Sales Order", filters=order_filter),
 		"deliveries": frappe.db.count("Delivery Note", filters=delivery_filter),
 		"invoices": frappe.db.count("Sales Invoice", filters=invoice_filter),
-		"payments": frappe.db.count("Sales Payment", filters=payment_filter),
+		"payments": frappe.db.count("Payment Entry", filters=payment_entry_filter)
+		+ frappe.db.count("Sales Payment", filters=sales_payment_filter),
 		"totals": {
 			"leads": 0,
 			"opportunities": _sum_field("Opportunity", "opportunity_amount", opportunity_filter),
 			"quotations": _sum_field("Quotation", "grand_total", quotation_filter),
 			"orders": _sum_field("Sales Order", "grand_total", order_filter),
 			"deliveries": _sum_field("Delivery Note", "grand_total", delivery_filter),
-			"invoices": _sum_field("Sales Invoice", "invoice_amount", invoice_filter),
-			"payments": _sum_field("Sales Payment", "paid_amount", payment_filter),
+			"invoices": _sum_field("Sales Invoice", "grand_total", invoice_filter),
+			"payments": _sum_field("Payment Entry", "paid_amount", payment_entry_filter)
+			+ _sum_field("Sales Payment", "paid_amount", sales_payment_filter),
 		},
 	}
 

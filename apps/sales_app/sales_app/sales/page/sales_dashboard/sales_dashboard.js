@@ -51,9 +51,9 @@ frappe.pages["sales-dashboard"].on_page_load = function (wrapper) {
 		{
 			key: "payments",
 			label: "Payments",
-			doctype: "Sales Payment",
+			doctype: "Payment Entry",
 			color: "#16a34a",
-			open_filters: { status: ["in", ["Pending"]] },
+			open_filters: { status: ["in", ["Submitted"]] },
 		},
 	];
 
@@ -424,7 +424,7 @@ frappe.pages["sales-dashboard"].on_page_load = function (wrapper) {
 	body.find("#sales-new-order").on("click", () => frappe.new_doc("Sales Order"));
 	body.find("#sales-new-delivery").on("click", () => frappe.new_doc("Delivery Note"));
 	body.find("#sales-new-invoice").on("click", () => frappe.new_doc("Sales Invoice"));
-	body.find("#sales-new-payment").on("click", () => frappe.new_doc("Sales Payment"));
+	body.find("#sales-new-payment").on("click", () => frappe.new_doc("Payment Entry"));
 	body.find("#sales-refresh").on("click", () => loadDashboard());
 	body.find(".sales-period-btn").on("click", function () {
 		setPeriodFilter($(this).data("period"));

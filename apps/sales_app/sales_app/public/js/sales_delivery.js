@@ -8,7 +8,7 @@ frappe.ui.form.on("Sales Delivery", {
 					args: { source_name: frm.doc.name, source_doctype: "Sales Delivery" },
 					callback(r) {
 						if (r.message) {
-							frappe.set_route("Form", "Sales Invoice", r.message);
+							frappe.set_route("Form", "Sales Lifecycle Invoice", r.message);
 						}
 					},
 				});

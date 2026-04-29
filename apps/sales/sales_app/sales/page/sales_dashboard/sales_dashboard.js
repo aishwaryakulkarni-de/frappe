@@ -11,7 +11,7 @@ frappe.pages["sales-dashboard"].on_page_load = function (wrapper) {
 		{ key: "quotations", label: "Quotations", doctype: "Quotation", color: "#0891b2" },
 		{ key: "orders", label: "Orders", doctype: "Sales Order", color: "#ea580c" },
 		{ key: "invoices", label: "Invoices", doctype: "Sales Invoice", color: "#dc2626" },
-		{ key: "payments", label: "Payments", doctype: "Sales Payment", color: "#16a34a" },
+		{ key: "payments", label: "Payments", doctype: "Payment Entry", color: "#16a34a" },
 	];
 
 	const style = $(`
